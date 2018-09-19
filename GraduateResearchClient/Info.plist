@@ -30,6 +30,8 @@
 	</array>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>バックグラウンドでも位置情報もらうね！</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>バックグラウンドでも位置情報をもらうね！</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>位置情報をもらうね！</string>
 	<key>LSApplicationCategoryType</key>

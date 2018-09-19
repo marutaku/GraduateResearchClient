@@ -12,9 +12,12 @@ import CoreLocation
 class ViewController: UIViewController {
     var locationManager: CLLocationManager!
     let request: Request = Request()
+    var timer: Timer?
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.timer = Timer.scheduledTimer(timeInterval: 300, target: self, selector: #selector(ViewController.timerUpdate), userInfo: nil, repeats: true)
         locationManager = CLLocationManager() // インスタンスの生成
         locationManager.requestAlwaysAuthorization()
         locationManager.delegate = self // CLLocationManagerDelegateプロトコルを実装するクラスを指定する
@@ -24,6 +27,9 @@ class ViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    @objc func timerUpdate() {
+        locationManager.requestLocation()
     }
 }
 
@@ -47,7 +53,7 @@ extension ViewController: CLLocationManagerDelegate {
             // 位置情報取得の開始処理
             locationManager.activityType = .fitness
             locationManager.distanceFilter = 10.0
-            locationManager.startUpdatingLocation()
+//            locationManager.startUpdatingLocation()
             break
         case .authorizedWhenInUse:
             print("起動時のみ、位置情報の取得が許可されています。")
@@ -62,6 +68,12 @@ extension ViewController: CLLocationManagerDelegate {
             postData(latitude: Float(location.coordinate.latitude), longitude: Float(location.coordinate.longitude))
         }
     }
+    func locationManager(_ manager: CLLocationManager, didVisit visit: CLVisit) {
+        // TODO 時間ごとに位置情報を取得するか、動きがあった時のみ位置情報を取得するかを検討
+        
+        
+    }
+
     func postData(latitude:Float, longitude: Float){
 //        TODO set server url
         let url: URL = URL(string: "https://f2a6a908.ngrok.io/api/place")!
@@ -80,6 +92,9 @@ extension ViewController: CLLocationManagerDelegate {
                 print(error!)
             }
         })
+    }
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print("位置情報の取得に失敗しました")
     }
 }
 
