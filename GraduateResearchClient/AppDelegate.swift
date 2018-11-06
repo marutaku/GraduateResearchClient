@@ -22,15 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.locationManager = CLLocationManager() // インスタンスの生成
         self.locationManager.delegate = self
         self.locationManager.requestAlwaysAuthorization()
-//        manager.activityType = .fitness
-//        manager.startMonitoringVisits()
-//        test code
-        let latitude =  35.566181
-        let longitude = 139.402674
-        let arraivalDate = Date()
-        let departureDate = Date()
-        let accuracy = 0.000
-        self.postData(latitude: Float(latitude), longitude: Float(longitude), accuracy: Float(accuracy), arraivalDate: arraivalDate, departureDate: departureDate)
+        self.locationManager.activityType = .fitness
+        self.locationManager.startMonitoringVisits()
         return true
     }
     
@@ -78,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         //        TODO set server url
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd' 'HH:mm:ss"
-        let url: URL = URL(string: "https://9cf30a6a.ngrok.io/api/visited")!
+        let url: URL = URL(string: "http://133.2.113.134/api/visited")!
         let body: NSMutableDictionary = NSMutableDictionary()
         body.setValue(latitude, forKey: "latitude")
         body.setValue(longitude, forKey: "longitude")
