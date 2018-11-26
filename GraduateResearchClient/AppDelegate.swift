@@ -15,7 +15,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var window: UIWindow?
     var locationManager: CLLocationManager!
     let request: Request = Request()
-
+    // =======================================================================
+    // ===========================TODO: Change user id========================
+    let user_id = 1
+    // =======================================================================
+    // =======================================================================
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -24,7 +28,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         self.locationManager.requestAlwaysAuthorization()
         self.locationManager.activityType = .fitness
         self.locationManager.startMonitoringVisits()
+        Timer.scheduledTimer(timeInterval: 600,                  //10分に一回生存報告
+            target: self,                                        //メソッドを持つオブジェクト
+            selector: #selector(AppDelegate.timerUpdate),        //実行するメソッド
+            userInfo: nil,                                       //オブジェクトに付けて送信する値
+            repeats: true)
         return true
+    }
+    
+    @objc func timerUpdate() {
+        let url: URL = URL(string: "http://133.2.113.134/api/monitoring")!
+        let body: NSMutableDictionary = NSMutableDictionary()
+        //        TODO get user id automatically
+        //        this is test code
+        body.setValue(self.user_id, forKey: "user_id")
+        print()
+        try? request.post(url: url, body: body, completionHandler: { data, response, error in
+            // code
+            if (error == nil) {
+                print("success")
+            } else {
+                print("failed")
+                print(error!)
+            }
+        })
     }
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -80,7 +107,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         body.setValue(formatter.string(from: departureDate), forKey: "departureDate")
         //        TODO get user id automatically
         //        this is test code
-        body.setValue(1, forKey: "user_id")
+        body.setValue(self.user_id, forKey: "user_id")
         try? request.post(url: url, body: body, completionHandler: { data, response, error in
             // code
             if (error == nil) {
@@ -95,7 +122,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         print("位置情報の取得に失敗しました")
     }
 }
-
-
-
-
